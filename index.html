@@ -8,198 +8,96 @@
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;800&display=swap" rel="stylesheet">
     
     <style>
-        /* المتغيرات الأساسية (الوضع النهاري) */
         :root {
-            --primary: #4f46e5;
-            --primary-hover: #4338ca;
-            --secondary: #10b981;
-            --secondary-hover: #059669;
+            --primary: #4f46e5; --primary-hover: #4338ca;
+            --secondary: #10b981; --secondary-hover: #059669;
             --danger: #ef4444;
-            
-            --body-bg-1: #fdfbfb;
-            --body-bg-2: #ebedee;
-            --card-bg: #ffffff;
-            --text-dark: #1f2937;
-            --text-light: #6b7280;
-            --border-color: #e5e7eb;
-            --section-bg: #f9fafb;
-            --story-bg: #ffffff;
+            --body-bg-1: #fdfbfb; --body-bg-2: #ebedee;
+            --card-bg: #ffffff; --text-dark: #1f2937;
+            --text-light: #6b7280; --border-color: #e5e7eb;
+            --section-bg: #f9fafb; --story-bg: #ffffff;
         }
 
-        /* المتغيرات (الوضع الليلي) */
         .dark-mode {
-            --body-bg-1: #111827;
-            --body-bg-2: #1f2937;
-            --card-bg: #374151;
-            --text-dark: #f3f4f6;
-            --text-light: #9ca3af;
-            --border-color: #4b5563;
-            --section-bg: #1f2937;
-            --story-bg: #111827;
+            --body-bg-1: #111827; --body-bg-2: #1f2937;
+            --card-bg: #374151; --text-dark: #f3f4f6;
+            --text-light: #9ca3af; --border-color: #4b5563;
+            --section-bg: #1f2937; --story-bg: #111827;
         }
 
         body {
             font-family: 'Cairo', sans-serif;
             background: linear-gradient(135deg, var(--body-bg-1) 0%, var(--body-bg-2) 100%);
-            color: var(--text-dark);
-            margin: 0;
-            padding: 20px;
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            color: var(--text-dark); margin: 0; padding: 20px;
+            min-height: 100vh; display: flex; justify-content: center; align-items: flex-start;
             transition: background 0.3s ease, color 0.3s ease;
         }
 
         .container {
-            width: 100%;
-            max-width: 800px;
-            background: var(--card-bg);
-            padding: 40px;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            animation: fadeIn 0.8s ease-in-out;
-            position: relative;
+            width: 100%; max-width: 800px; margin-top: 40px;
+            background: var(--card-bg); padding: 40px; border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1); position: relative;
             transition: background 0.3s ease;
         }
 
-        /* زر الوضع الليلي */
         .theme-toggle {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            background: none;
-            border: none;
-            font-size: 24px;
-            cursor: pointer;
-            box-shadow: none;
-            width: auto;
-            padding: 0;
-            color: var(--text-dark);
-        }
-        .theme-toggle:hover {
-            background: none;
-            transform: scale(1.1);
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+            position: absolute; top: 20px; left: 20px; background: none; border: none;
+            font-size: 24px; cursor: pointer; color: var(--text-dark); padding: 0; box-shadow: none; width: auto;
         }
 
         h2 { text-align: center; color: var(--primary); font-weight: 800; font-size: 28px; margin-bottom: 30px; }
         h3 { color: var(--text-dark); font-weight: 600; margin-bottom: 15px; }
-        p { color: var(--text-light); line-height: 1.8; }
 
-        /* تنسيق الحقول */
-        input[type="email"], input[type="password"] {
-            width: 100%;
-            padding: 12px 15px;
-            margin-bottom: 15px;
-            border: 2px solid var(--border-color);
-            border-radius: 10px;
-            box-sizing: border-box;
-            font-family: 'Cairo', sans-serif;
-            background-color: var(--card-bg);
-            color: var(--text-dark);
-            transition: border-color 0.3s, background-color 0.3s, color 0.3s;
+        input, textarea {
+            width: 100%; padding: 12px 15px; margin-bottom: 15px;
+            border: 2px solid var(--border-color); border-radius: 10px;
+            box-sizing: border-box; font-family: 'Cairo', sans-serif;
+            background-color: var(--card-bg); color: var(--text-dark); font-size: 16px;
         }
-        input:focus { border-color: var(--primary); outline: none; }
+        input:focus, textarea:focus { border-color: var(--primary); outline: none; }
+        textarea { height: 120px; resize: vertical; }
+        input[type="file"] { padding: 8px; border: 1px dashed var(--primary); background: var(--section-bg); cursor: pointer; }
 
-        /* تنسيق الأزرار */
         button {
-            width: 100%;
-            padding: 12px;
-            border: none;
-            border-radius: 10px;
-            background: var(--primary);
-            color: white;
-            font-size: 16px;
-            font-weight: 600;
-            font-family: 'Cairo', sans-serif;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 6px rgba(79, 70, 229, 0.2);
+            width: 100%; padding: 12px; border: none; border-radius: 10px;
+            background: var(--primary); color: white; font-size: 16px; font-weight: 600;
+            font-family: 'Cairo', sans-serif; cursor: pointer; transition: all 0.3s ease;
         }
         button:hover { background: var(--primary-hover); transform: translateY(-2px); }
-        button.btn-success { background: var(--secondary); box-shadow: 0 4px 6px rgba(16, 185, 129, 0.2); }
+        button:disabled { background: #9ca3af; cursor: not-allowed; transform: none; }
+        button.btn-success { background: var(--secondary); }
         button.btn-success:hover { background: var(--secondary-hover); }
-        button.btn-danger { background: var(--danger); box-shadow: none; margin-top: 20px; }
+        button.btn-danger { background: var(--danger); }
         
-        .btn-small { width: auto; padding: 8px 15px; font-size: 14px; }
+        .btn-small { width: auto; padding: 6px 12px; font-size: 13px; margin-top: 5px; }
 
-        /* مناطق الأقسام */
-        .card-section {
-            background: var(--section-bg);
-            padding: 20px;
-            border-radius: 15px;
-            margin-bottom: 20px;
-            border: 1px solid var(--border-color);
-            transition: background 0.3s, border-color 0.3s;
+        .card-section { background: var(--section-bg); padding: 20px; border-radius: 15px; margin-bottom: 20px; border: 1px solid var(--border-color); }
+
+        /* تنسيق المذكرات (Timeline) */
+        .note-card {
+            background: var(--story-bg); border: 1px solid var(--border-color);
+            border-radius: 15px; padding: 20px; margin-bottom: 25px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.02); position: relative;
         }
+        .note-date { display: inline-block; background: var(--primary); color: white; padding: 4px 12px; border-radius: 20px; font-size: 14px; font-weight: 600; margin-bottom: 15px; }
+        .note-text { white-space: pre-wrap; line-height: 1.8; font-size: 17px; margin-bottom: 15px; }
+        .note-img { max-width: 100%; border-radius: 10px; display: block; margin-top: 10px; border: 1px solid var(--border-color); }
 
-        textarea {
-            width: 100%;
-            height: 250px;
-            padding: 15px;
-            border: 2px solid var(--border-color);
-            border-radius: 10px;
-            font-family: 'Cairo', sans-serif;
-            font-size: 16px;
-            line-height: 1.8;
-            resize: vertical;
-            box-sizing: border-box;
-            background-color: var(--card-bg);
-            color: var(--text-dark);
-            transition: border-color 0.3s, background-color 0.3s, color 0.3s;
-        }
-        textarea:focus { border-color: var(--primary); outline: none; }
+        .request-box { background: var(--card-bg); padding: 15px; border-radius: 10px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; border: 1px solid var(--border-color); }
 
-        /* قائمة الطلبات */
-        .request-box {
-            background: var(--card-bg);
-            padding: 15px;
-            border-radius: 10px;
-            margin-bottom: 10px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border: 1px solid var(--border-color);
-            box-shadow: 0 2px 5px rgba(0,0,0,0.02);
-            color: var(--text-dark);
-        }
-
-        /* تنسيق عرض القصة */
-        .story-display {
-            background: var(--story-bg);
-            padding: 30px;
-            border-radius: 15px;
-            border: 1px solid var(--border-color);
-            white-space: pre-wrap;
-            font-size: 18px;
-            line-height: 2;
-            color: var(--text-dark);
-            box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
-            transition: background 0.3s, border-color 0.3s, color 0.3s;
-        }
-
-        /* الإشعارات التفاعلية */
         #toast {
-            visibility: hidden; min-width: 250px; background-color: #333; color: #fff;
-            text-align: center; border-radius: 10px; padding: 15px;
-            position: fixed; z-index: 1000; left: 50%; bottom: 30px;
-            transform: translateX(-50%); font-family: 'Cairo', sans-serif;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2); opacity: 0; transition: opacity 0.3s, bottom 0.3s;
+            visibility: hidden; min-width: 250px; background-color: #333; color: #fff; text-align: center; border-radius: 10px; padding: 15px;
+            position: fixed; z-index: 1000; left: 50%; bottom: 30px; transform: translateX(-50%); font-family: 'Cairo', sans-serif; opacity: 0; transition: opacity 0.3s, bottom 0.3s;
         }
         #toast.show { visibility: visible; opacity: 1; bottom: 50px; }
-
         #admin-panel, #story-content, #login-section, #denied-message { display: none; }
     </style>
     
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-        import { getFirestore, doc, getDoc, setDoc, updateDoc, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getFirestore, doc, getDoc, setDoc, updateDoc, collection, getDocs, addDoc, deleteDoc, query, orderBy } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyChl-6LNVY7pSbBEdPbucTjnm9vLJKU7xc",
@@ -213,14 +111,15 @@
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
+        const storage = getStorage(app); // تفعيل التخزين للصور
         const ADMIN_EMAIL = "hashem.anwer.2003@gmail.com"; 
+        let currentUserEmail = "";
 
         const loginSection = document.getElementById('login-section');
         const storyContent = document.getElementById('story-content');
         const adminPanel = document.getElementById('admin-panel');
         const deniedMessage = document.getElementById('denied-message');
-        const storyText = document.getElementById('story-text');
-        const editor = document.getElementById('editor');
+        const notesContainer = document.getElementById('notes-container');
         const requestsList = document.getElementById('requests-list');
 
         function showNotification(message, isError = false) {
@@ -233,28 +132,26 @@
 
         onAuthStateChanged(auth, async (user) => {
             if (user) {
+                currentUserEmail = user.email;
                 loginSection.style.display = 'none';
-                
-                const storyDoc = await getDoc(doc(db, "content", "myStory"));
-                if (storyDoc.exists()) {
-                    storyText.innerText = storyDoc.data().text;
-                    editor.value = storyDoc.data().text;
-                }
 
                 if (user.email === ADMIN_EMAIL) {
                     adminPanel.style.display = 'block';
                     storyContent.style.display = 'block';
                     loadRequests();
+                    loadNotes(); // تحميل المذكرات
                 } else {
                     const userDoc = await getDoc(doc(db, "allowedUsers", user.email));
                     if (userDoc.exists() && userDoc.data().isAllowed === true) {
                         storyContent.style.display = 'block';
+                        loadNotes(); // تحميل المذكرات للزائر
                         showNotification("مرحباً بك! قراءة ممتعة.");
                     } else {
                         deniedMessage.style.display = 'block';
                     }
                 }
             } else {
+                currentUserEmail = "";
                 loginSection.style.display = 'block';
                 adminPanel.style.display = 'none';
                 storyContent.style.display = 'none';
@@ -266,95 +163,143 @@
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
             if(!email || !password) return showNotification("الرجاء إدخال البريد وكلمة المرور", true);
-            
-            try {
-                await signInWithEmailAndPassword(auth, email, password);
-                showNotification("تم تسجيل الدخول بنجاح!");
-            } catch(error) {
-                showNotification("خطأ في تسجيل الدخول، تأكد من البيانات.", true);
-            }
+            try { await signInWithEmailAndPassword(auth, email, password); showNotification("تم الدخول!"); } 
+            catch(error) { showNotification("خطأ في تسجيل الدخول.", true); }
         };
 
         window.requestAccess = async () => {
             const email = document.getElementById('signup-email').value;
             const password = document.getElementById('signup-password').value;
-            if(!email || !password) return showNotification("يرجى إدخال الإيميل وكلمة المرور", true);
-            
+            if(!email || !password) return showNotification("يرجى إدخال البيانات", true);
             try {
                 await createUserWithEmailAndPassword(auth, email, password);
                 await setDoc(doc(db, "allowedUsers", email), { isAllowed: false });
-                showNotification("تم إرسال طلبك بنجاح! يرجى الانتظار لحين القبول.");
+                showNotification("تم إرسال طلبك للأدمن!");
                 signOut(auth);
-            } catch(error) {
-                showNotification("حدث خطأ، ربما الإيميل مستخدم مسبقاً.", true);
-            }
+            } catch(error) { showNotification("خطأ، ربما الإيميل مستخدم.", true); }
         };
 
         window.logout = () => signOut(auth);
 
-        window.saveStory = async () => {
-            const newText = editor.value;
+        // -----------------------------------------
+        // نظام المذكرات (ملاحظات وصور)
+        // -----------------------------------------
+        
+        // جلب وعرض المذكرات مرتبة حسب التاريخ
+        async function loadNotes() {
+            notesContainer.innerHTML = "<p style='text-align:center;'>جاري تحميل الذكريات... ⏳</p>";
+            const q = query(collection(db, "diaryNotes"), orderBy("date", "desc"));
+            const querySnapshot = await getDocs(q);
+            
+            let html = "";
+            querySnapshot.forEach((docSnap) => {
+                const data = docSnap.data();
+                const noteId = docSnap.id;
+                // زر الحذف يظهر للأدمن فقط
+                const deleteBtn = (currentUserEmail === ADMIN_EMAIL) 
+                    ? `<button class="btn-danger btn-small" style="position:absolute; left:20px; top:20px;" onclick="deleteNote('${noteId}')">🗑️ حذف</button>` 
+                    : "";
+                
+                const imageHtml = data.imageUrl ? `<img src="${data.imageUrl}" class="note-img" alt="صورة الذاكرة">` : "";
+
+                html += `
+                <div class="note-card">
+                    ${deleteBtn}
+                    <div class="note-date">📅 ${data.date}</div>
+                    <div class="note-text">${data.text}</div>
+                    ${imageHtml}
+                </div>`;
+            });
+            notesContainer.innerHTML = html || "<p style='text-align:center;'>لم تتم كتابة أي مذكرات بعد.</p>";
+        }
+
+        // إضافة مذكرة جديدة (مع رفع الصورة)
+        window.addNewNote = async () => {
+            const dateInput = document.getElementById('note-date').value;
+            const textInput = document.getElementById('note-text').value;
+            const fileInput = document.getElementById('note-image').files[0];
+            const submitBtn = document.getElementById('add-note-btn');
+
+            if (!textInput) return showNotification("يرجى كتابة نص المذكرة على الأقل!", true);
+            
+            // إذا لم يحدد تاريخ، نأخذ تاريخ اليوم
+            const finalDate = dateInput || new Date().toISOString().split('T')[0];
+
+            submitBtn.disabled = true;
+            submitBtn.innerText = "جاري الرفع والحفظ... ⏳";
+
             try {
-                await setDoc(doc(db, "content", "myStory"), { text: newText });
-                storyText.innerText = newText;
-                showNotification("✨ تم حفظ القصة بنجاح!");
-            } catch(error) {
-                showNotification("حدث خطأ أثناء الحفظ", true);
+                let downloadUrl = "";
+                // رفع الصورة إذا وجدت
+                if (fileInput) {
+                    const storageRef = ref(storage, 'images/' + Date.now() + '_' + fileInput.name);
+                    await uploadBytes(storageRef, fileInput);
+                    downloadUrl = await getDownloadURL(storageRef);
+                }
+
+                // حفظ البيانات في Firestore
+                await addDoc(collection(db, "diaryNotes"), {
+                    date: finalDate,
+                    text: textInput,
+                    imageUrl: downloadUrl,
+                    timestamp: Date.now()
+                });
+
+                showNotification("✨ تم حفظ المذكرة بنجاح!");
+                document.getElementById('note-text').value = "";
+                document.getElementById('note-image').value = "";
+                loadNotes(); // تحديث العرض
+            } catch (error) {
+                showNotification("حدث خطأ أثناء الحفظ!", true);
+                console.error(error);
+            }
+
+            submitBtn.disabled = false;
+            submitBtn.innerText = "➕ إضافة المذكرة للنظام";
+        };
+
+        // حذف مذكرة
+        window.deleteNote = async (noteId) => {
+            if(confirm("هل أنت متأكد من حذف هذه المذكرة نهائياً؟")) {
+                try {
+                    await deleteDoc(doc(db, "diaryNotes", noteId));
+                    showNotification("تم الحذف.");
+                    loadNotes();
+                } catch(e) { showNotification("خطأ في الحذف.", true); }
             }
         };
 
+        // -----------------------------------------
+        // إدارة الطلبات (كما هي)
+        // -----------------------------------------
         async function loadRequests() {
             requestsList.innerHTML = "<p>جاري تحميل الطلبات...</p>";
             const querySnapshot = await getDocs(collection(db, "allowedUsers"));
-            let html = "";
-            let hasRequests = false;
-            
+            let html = ""; let hasRequests = false;
             querySnapshot.forEach((d) => {
                 if (d.data().isAllowed === false && d.id !== ADMIN_EMAIL) {
                     hasRequests = true;
-                    html += `
-                    <div class="request-box">
-                        <span style="font-weight: 600;">${d.id}</span>
-                        <button class="btn-success btn-small" onclick="approveUser('${d.id}')">✔️ السماح</button>
-                    </div>`;
+                    html += `<div class="request-box"><span style="font-weight:600;">${d.id}</span><button class="btn-success btn-small" onclick="approveUser('${d.id}')">✔️ السماح</button></div>`;
                 }
             });
-            requestsList.innerHTML = hasRequests ? html : "<p style='text-align: center;'>لا توجد طلبات معلقة حالياً.</p>";
+            requestsList.innerHTML = hasRequests ? html : "<p style='text-align: center;'>لا توجد طلبات معلقة.</p>";
         }
 
         window.approveUser = async (userEmail) => {
-            try {
-                await updateDoc(doc(db, "allowedUsers", userEmail), { isAllowed: true });
-                showNotification(`تم السماح للمستخدم: ${userEmail}`);
-                loadRequests();
-            } catch(error) {
-                showNotification("حدث خطأ أثناء الموافقة", true);
-            }
+            await updateDoc(doc(db, "allowedUsers", userEmail), { isAllowed: true });
+            showNotification(`تم السماح لـ: ${userEmail}`); loadRequests();
         };
 
         // -----------------------------------------
-        // كود الوضع الليلي (Dark Mode)
+        // كود الوضع الليلي
         // -----------------------------------------
         const themeToggleBtn = document.getElementById('theme-toggle');
         const body = document.body;
-
-        // التحقق من الاختيار السابق المحفوظ في المتصفح
-        if (localStorage.getItem('theme') === 'dark') {
-            body.classList.add('dark-mode');
-            themeToggleBtn.innerText = '☀️';
-        }
-
-        // دالة تغيير الوضع عند الضغط على الزر
+        if (localStorage.getItem('theme') === 'dark') { body.classList.add('dark-mode'); themeToggleBtn.innerText = '☀️'; }
         window.toggleTheme = () => {
             body.classList.toggle('dark-mode');
-            
-            if (body.classList.contains('dark-mode')) {
-                localStorage.setItem('theme', 'dark');
-                themeToggleBtn.innerText = '☀️'; // تغيير الأيقونة لشمس
-            } else {
-                localStorage.setItem('theme', 'light');
-                themeToggleBtn.innerText = '🌙'; // تغيير الأيقونة لقمر
-            }
+            if (body.classList.contains('dark-mode')) { localStorage.setItem('theme', 'dark'); themeToggleBtn.innerText = '☀️'; } 
+            else { localStorage.setItem('theme', 'light'); themeToggleBtn.innerText = '🌙'; }
         };
     </script>
 </head>
@@ -372,12 +317,10 @@
             <h3>تسجيل الدخول</h3>
             <input type="email" id="email" placeholder="البريد الإلكتروني">
             <input type="password" id="password" placeholder="كلمة المرور">
-            <button onclick="login()">تسجيل الدخول</button>
+            <button onclick="login()">دخول</button>
         </div>
-
         <div class="card-section">
             <h3 style="color: var(--secondary);">زائر جديد؟ اطلب الإذن للقراءة</h3>
-            <p>اكتب بريدك الإلكتروني وضع كلمة مرور لإنشاء حساب وإرسال طلب للأدمن.</p>
             <input type="email" id="signup-email" placeholder="بريدك الإلكتروني">
             <input type="password" id="signup-password" placeholder="كلمة مرور جديدة لك">
             <button class="btn-success" onclick="requestAccess()">إرسال طلب للأدمن</button>
@@ -386,26 +329,36 @@
 
     <div id="denied-message" class="card-section" style="text-align: center; border-color: var(--danger);">
         <h3 style="color: var(--danger);">عذراً، طلبك لا يزال قيد المراجعة ⏳</h3>
-        <p>لم يتم منحك الصلاحية للقراءة بعد، يرجى المحاولة لاحقاً بعد موافقة الأدمن.</p>
         <button class="btn-danger btn-small" onclick="logout()">تسجيل خروج</button>
     </div>
 
     <div id="admin-panel" class="card-section" style="border-color: var(--primary);">
         <h3 style="color: var(--primary);">⚙️ لوحة تحكم الأدمن (هاشم)</h3>
         
-        <h4 style="margin-top: 20px;">1. كتابة وتعديل القصة:</h4>
-        <textarea id="editor" placeholder="ابدأ بكتابة فصول حياتك هنا..."></textarea>
-        <button onclick="saveStory()" style="margin-top: 10px;">💾 حفظ ونشر التعديلات</button>
+        <h4 style="margin-top: 20px;">📝 إضافة محطة / مذكرة جديدة:</h4>
+        <div style="background: var(--card-bg); padding: 15px; border-radius: 10px; border: 1px solid var(--border-color);">
+            <label style="font-weight:bold; margin-bottom:5px; display:block;">اختر التاريخ:</label>
+            <input type="date" id="note-date">
+            
+            <label style="font-weight:bold; margin-bottom:5px; display:block;">نص المذكرة:</label>
+            <textarea id="note-text" placeholder="ماذا حدث في هذه المحطة من حياتك؟"></textarea>
+            
+            <label style="font-weight:bold; margin-bottom:5px; display:block;">إرفاق صورة (اختياري):</label>
+            <input type="file" id="note-image" accept="image/*">
+            
+            <button id="add-note-btn" onclick="addNewNote()" style="margin-top: 10px;">➕ إضافة المذكرة للنظام</button>
+        </div>
         
         <hr style="border: 0; border-top: 2px dashed var(--border-color); margin: 30px 0;">
         
-        <h4>2. طلبات القراءة المعلقة:</h4>
+        <h4>🔔 طلبات القراءة المعلقة:</h4>
         <div id="requests-list"></div>
     </div>
 
     <div id="story-content">
-        <h3 style="color: var(--primary); border-bottom: 2px solid var(--border-color); padding-bottom: 10px;">📖 القصة:</h3>
-        <div class="story-display" id="story-text">جاري تحميل القصة...</div>
+        <h3 style="color: var(--primary); border-bottom: 2px solid var(--border-color); padding-bottom: 10px; margin-bottom: 20px;">📖 محطات حياتي:</h3>
+        
+        <div id="notes-container"></div>
         
         <button class="btn-danger" style="margin-top: 30px; width: auto; padding: 10px 20px;" onclick="logout()">تسجيل خروج</button>
     </div>
