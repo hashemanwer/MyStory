@@ -8,22 +8,39 @@
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;800&display=swap" rel="stylesheet">
     
     <style>
-        /* الألوان والمتغيرات الأساسية */
+        /* المتغيرات الأساسية (الوضع النهاري) */
         :root {
             --primary: #4f46e5;
             --primary-hover: #4338ca;
             --secondary: #10b981;
             --secondary-hover: #059669;
-            --bg-color: #f3f4f6;
+            --danger: #ef4444;
+            
+            --body-bg-1: #fdfbfb;
+            --body-bg-2: #ebedee;
             --card-bg: #ffffff;
             --text-dark: #1f2937;
             --text-light: #6b7280;
-            --danger: #ef4444;
+            --border-color: #e5e7eb;
+            --section-bg: #f9fafb;
+            --story-bg: #ffffff;
+        }
+
+        /* المتغيرات (الوضع الليلي) */
+        .dark-mode {
+            --body-bg-1: #111827;
+            --body-bg-2: #1f2937;
+            --card-bg: #374151;
+            --text-dark: #f3f4f6;
+            --text-light: #9ca3af;
+            --border-color: #4b5563;
+            --section-bg: #1f2937;
+            --story-bg: #111827;
         }
 
         body {
             font-family: 'Cairo', sans-serif;
-            background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
+            background: linear-gradient(135deg, var(--body-bg-1) 0%, var(--body-bg-2) 100%);
             color: var(--text-dark);
             margin: 0;
             padding: 20px;
@@ -31,6 +48,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
+            transition: background 0.3s ease, color 0.3s ease;
         }
 
         .container {
@@ -39,8 +57,29 @@
             background: var(--card-bg);
             padding: 40px;
             border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
             animation: fadeIn 0.8s ease-in-out;
+            position: relative;
+            transition: background 0.3s ease;
+        }
+
+        /* زر الوضع الليلي */
+        .theme-toggle {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: none;
+            width: auto;
+            padding: 0;
+            color: var(--text-dark);
+        }
+        .theme-toggle:hover {
+            background: none;
+            transform: scale(1.1);
         }
 
         @keyframes fadeIn {
@@ -57,11 +96,13 @@
             width: 100%;
             padding: 12px 15px;
             margin-bottom: 15px;
-            border: 2px solid #e5e7eb;
+            border: 2px solid var(--border-color);
             border-radius: 10px;
             box-sizing: border-box;
             font-family: 'Cairo', sans-serif;
-            transition: border-color 0.3s;
+            background-color: var(--card-bg);
+            color: var(--text-dark);
+            transition: border-color 0.3s, background-color 0.3s, color 0.3s;
         }
         input:focus { border-color: var(--primary); outline: none; }
 
@@ -89,54 +130,60 @@
 
         /* مناطق الأقسام */
         .card-section {
-            background: #f9fafb;
+            background: var(--section-bg);
             padding: 20px;
             border-radius: 15px;
             margin-bottom: 20px;
-            border: 1px solid #f3f4f6;
+            border: 1px solid var(--border-color);
+            transition: background 0.3s, border-color 0.3s;
         }
 
         textarea {
             width: 100%;
             height: 250px;
             padding: 15px;
-            border: 2px solid #e5e7eb;
+            border: 2px solid var(--border-color);
             border-radius: 10px;
             font-family: 'Cairo', sans-serif;
             font-size: 16px;
             line-height: 1.8;
             resize: vertical;
             box-sizing: border-box;
+            background-color: var(--card-bg);
+            color: var(--text-dark);
+            transition: border-color 0.3s, background-color 0.3s, color 0.3s;
         }
         textarea:focus { border-color: var(--primary); outline: none; }
 
         /* قائمة الطلبات */
         .request-box {
-            background: white;
+            background: var(--card-bg);
             padding: 15px;
             border-radius: 10px;
             margin-bottom: 10px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border: 1px solid #e5e7eb;
+            border: 1px solid var(--border-color);
             box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+            color: var(--text-dark);
         }
 
         /* تنسيق عرض القصة */
         .story-display {
-            background: #ffffff;
+            background: var(--story-bg);
             padding: 30px;
             border-radius: 15px;
-            border: 1px solid #e5e7eb;
+            border: 1px solid var(--border-color);
             white-space: pre-wrap;
             font-size: 18px;
             line-height: 2;
-            color: #374151;
+            color: var(--text-dark);
             box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
+            transition: background 0.3s, border-color 0.3s, color 0.3s;
         }
 
-        /* الإشعارات التفاعلية (Toast) */
+        /* الإشعارات التفاعلية */
         #toast {
             visibility: hidden; min-width: 250px; background-color: #333; color: #fff;
             text-align: center; border-radius: 10px; padding: 15px;
@@ -146,7 +193,6 @@
         }
         #toast.show { visibility: visible; opacity: 1; bottom: 50px; }
 
-        /* إخفاء الأقسام برمجياً */
         #admin-panel, #story-content, #login-section, #denied-message { display: none; }
     </style>
     
@@ -155,7 +201,6 @@
         import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
         import { getFirestore, doc, getDoc, setDoc, updateDoc, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-        // إعدادات مشروعك
         const firebaseConfig = {
             apiKey: "AIzaSyChl-6LNVY7pSbBEdPbucTjnm9vLJKU7xc",
             authDomain: "mystory-9601f.firebaseapp.com",
@@ -178,7 +223,6 @@
         const editor = document.getElementById('editor');
         const requestsList = document.getElementById('requests-list');
 
-        // نظام الإشعارات الجميل
         function showNotification(message, isError = false) {
             const toast = document.getElementById('toast');
             toast.innerText = message;
@@ -270,12 +314,12 @@
                     hasRequests = true;
                     html += `
                     <div class="request-box">
-                        <span style="font-weight: 600; color: #4b5563;">${d.id}</span>
+                        <span style="font-weight: 600;">${d.id}</span>
                         <button class="btn-success btn-small" onclick="approveUser('${d.id}')">✔️ السماح</button>
                     </div>`;
                 }
             });
-            requestsList.innerHTML = hasRequests ? html : "<p style='color: #6b7280; text-align: center;'>لا توجد طلبات معلقة حالياً.</p>";
+            requestsList.innerHTML = hasRequests ? html : "<p style='text-align: center;'>لا توجد طلبات معلقة حالياً.</p>";
         }
 
         window.approveUser = async (userEmail) => {
@@ -287,6 +331,31 @@
                 showNotification("حدث خطأ أثناء الموافقة", true);
             }
         };
+
+        // -----------------------------------------
+        // كود الوضع الليلي (Dark Mode)
+        // -----------------------------------------
+        const themeToggleBtn = document.getElementById('theme-toggle');
+        const body = document.body;
+
+        // التحقق من الاختيار السابق المحفوظ في المتصفح
+        if (localStorage.getItem('theme') === 'dark') {
+            body.classList.add('dark-mode');
+            themeToggleBtn.innerText = '☀️';
+        }
+
+        // دالة تغيير الوضع عند الضغط على الزر
+        window.toggleTheme = () => {
+            body.classList.toggle('dark-mode');
+            
+            if (body.classList.contains('dark-mode')) {
+                localStorage.setItem('theme', 'dark');
+                themeToggleBtn.innerText = '☀️'; // تغيير الأيقونة لشمس
+            } else {
+                localStorage.setItem('theme', 'light');
+                themeToggleBtn.innerText = '🌙'; // تغيير الأيقونة لقمر
+            }
+        };
     </script>
 </head>
 <body>
@@ -294,6 +363,8 @@
 <div id="toast"></div>
 
 <div class="container">
+    <button id="theme-toggle" class="theme-toggle" onclick="toggleTheme()" title="تغيير المظهر">🌙</button>
+
     <h2>My Story</h2>
 
     <div id="login-section">
@@ -304,8 +375,8 @@
             <button onclick="login()">تسجيل الدخول</button>
         </div>
 
-        <div class="card-section" style="background: #f0fdf4; border-color: #dcfce7;">
-            <h3 style="color: var(--secondary-hover);">زائر جديد؟ اطلب الإذن للقراءة</h3>
+        <div class="card-section">
+            <h3 style="color: var(--secondary);">زائر جديد؟ اطلب الإذن للقراءة</h3>
             <p>اكتب بريدك الإلكتروني وضع كلمة مرور لإنشاء حساب وإرسال طلب للأدمن.</p>
             <input type="email" id="signup-email" placeholder="بريدك الإلكتروني">
             <input type="password" id="signup-password" placeholder="كلمة مرور جديدة لك">
@@ -313,27 +384,27 @@
         </div>
     </div>
 
-    <div id="denied-message" class="card-section" style="text-align: center; background: #fef2f2; border-color: #fee2e2;">
+    <div id="denied-message" class="card-section" style="text-align: center; border-color: var(--danger);">
         <h3 style="color: var(--danger);">عذراً، طلبك لا يزال قيد المراجعة ⏳</h3>
         <p>لم يتم منحك الصلاحية للقراءة بعد، يرجى المحاولة لاحقاً بعد موافقة الأدمن.</p>
         <button class="btn-danger btn-small" onclick="logout()">تسجيل خروج</button>
     </div>
 
-    <div id="admin-panel" class="card-section" style="background: #eef2ff; border-color: #e0e7ff;">
+    <div id="admin-panel" class="card-section" style="border-color: var(--primary);">
         <h3 style="color: var(--primary);">⚙️ لوحة تحكم الأدمن (هاشم)</h3>
         
         <h4 style="margin-top: 20px;">1. كتابة وتعديل القصة:</h4>
         <textarea id="editor" placeholder="ابدأ بكتابة فصول حياتك هنا..."></textarea>
         <button onclick="saveStory()" style="margin-top: 10px;">💾 حفظ ونشر التعديلات</button>
         
-        <hr style="border: 0; border-top: 2px dashed #c7d2fe; margin: 30px 0;">
+        <hr style="border: 0; border-top: 2px dashed var(--border-color); margin: 30px 0;">
         
         <h4>2. طلبات القراءة المعلقة:</h4>
         <div id="requests-list"></div>
     </div>
 
     <div id="story-content">
-        <h3 style="color: var(--primary); border-bottom: 2px solid #e5e7eb; padding-bottom: 10px;">📖 القصة:</h3>
+        <h3 style="color: var(--primary); border-bottom: 2px solid var(--border-color); padding-bottom: 10px;">📖 القصة:</h3>
         <div class="story-display" id="story-text">جاري تحميل القصة...</div>
         
         <button class="btn-danger" style="margin-top: 30px; width: auto; padding: 10px 20px;" onclick="logout()">تسجيل خروج</button>
