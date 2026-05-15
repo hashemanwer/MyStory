@@ -2,18 +2,152 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>قصة حياتي</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>قصة حياتي | هاشم أنور</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;800&display=swap" rel="stylesheet">
+    
     <style>
-        body { font-family: Arial, sans-serif; padding: 20px; background-color: #f4f4f9; line-height: 1.6; }
-        .container { max-width: 800px; margin: auto; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
-        button { padding: 10px 15px; cursor: pointer; background: #007bff; color: white; border: none; border-radius: 5px; margin-top: 5px; }
-        button:hover { background: #0056b3; }
-        input { padding: 8px; width: 80%; max-width: 300px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 4px; }
-        textarea { width: 100%; height: 200px; margin-top: 10px; padding: 10px; border: 1px solid #ccc; border-radius: 4px; }
+        /* الألوان والمتغيرات الأساسية */
+        :root {
+            --primary: #4f46e5;
+            --primary-hover: #4338ca;
+            --secondary: #10b981;
+            --secondary-hover: #059669;
+            --bg-color: #f3f4f6;
+            --card-bg: #ffffff;
+            --text-dark: #1f2937;
+            --text-light: #6b7280;
+            --danger: #ef4444;
+        }
+
+        body {
+            font-family: 'Cairo', sans-serif;
+            background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
+            color: var(--text-dark);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 800px;
+            background: var(--card-bg);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            animation: fadeIn 0.8s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h2 { text-align: center; color: var(--primary); font-weight: 800; font-size: 28px; margin-bottom: 30px; }
+        h3 { color: var(--text-dark); font-weight: 600; margin-bottom: 15px; }
+        p { color: var(--text-light); line-height: 1.8; }
+
+        /* تنسيق الحقول */
+        input[type="email"], input[type="password"] {
+            width: 100%;
+            padding: 12px 15px;
+            margin-bottom: 15px;
+            border: 2px solid #e5e7eb;
+            border-radius: 10px;
+            box-sizing: border-box;
+            font-family: 'Cairo', sans-serif;
+            transition: border-color 0.3s;
+        }
+        input:focus { border-color: var(--primary); outline: none; }
+
+        /* تنسيق الأزرار */
+        button {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 10px;
+            background: var(--primary);
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            font-family: 'Cairo', sans-serif;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(79, 70, 229, 0.2);
+        }
+        button:hover { background: var(--primary-hover); transform: translateY(-2px); }
+        button.btn-success { background: var(--secondary); box-shadow: 0 4px 6px rgba(16, 185, 129, 0.2); }
+        button.btn-success:hover { background: var(--secondary-hover); }
+        button.btn-danger { background: var(--danger); box-shadow: none; margin-top: 20px; }
+        
+        .btn-small { width: auto; padding: 8px 15px; font-size: 14px; }
+
+        /* مناطق الأقسام */
+        .card-section {
+            background: #f9fafb;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            border: 1px solid #f3f4f6;
+        }
+
+        textarea {
+            width: 100%;
+            height: 250px;
+            padding: 15px;
+            border: 2px solid #e5e7eb;
+            border-radius: 10px;
+            font-family: 'Cairo', sans-serif;
+            font-size: 16px;
+            line-height: 1.8;
+            resize: vertical;
+            box-sizing: border-box;
+        }
+        textarea:focus { border-color: var(--primary); outline: none; }
+
+        /* قائمة الطلبات */
+        .request-box {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid #e5e7eb;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+        }
+
+        /* تنسيق عرض القصة */
+        .story-display {
+            background: #ffffff;
+            padding: 30px;
+            border-radius: 15px;
+            border: 1px solid #e5e7eb;
+            white-space: pre-wrap;
+            font-size: 18px;
+            line-height: 2;
+            color: #374151;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
+        }
+
+        /* الإشعارات التفاعلية (Toast) */
+        #toast {
+            visibility: hidden; min-width: 250px; background-color: #333; color: #fff;
+            text-align: center; border-radius: 10px; padding: 15px;
+            position: fixed; z-index: 1000; left: 50%; bottom: 30px;
+            transform: translateX(-50%); font-family: 'Cairo', sans-serif;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2); opacity: 0; transition: opacity 0.3s, bottom 0.3s;
+        }
+        #toast.show { visibility: visible; opacity: 1; bottom: 50px; }
+
+        /* إخفاء الأقسام برمجياً */
         #admin-panel, #story-content, #login-section, #denied-message { display: none; }
-        .request-box { background: #e9ecef; padding: 10px; margin: 10px 0; border-radius: 5px; display: flex; justify-content: space-between; align-items: center; }
-        .btn-success { background: #28a745; }
-        .btn-success:hover { background: #218838; }
     </style>
     
     <script type="module">
@@ -21,7 +155,7 @@
         import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
         import { getFirestore, doc, getDoc, setDoc, updateDoc, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-        // إعدادات مشروع Firebase الخاصة بك
+        // إعدادات مشروعك
         const firebaseConfig = {
             apiKey: "AIzaSyChl-6LNVY7pSbBEdPbucTjnm9vLJKU7xc",
             authDomain: "mystory-9601f.firebaseapp.com",
@@ -34,8 +168,6 @@
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
-
-        // إيميلك كأدمن
         const ADMIN_EMAIL = "hashem.anwer.2003@gmail.com"; 
 
         const loginSection = document.getElementById('login-section');
@@ -46,11 +178,19 @@
         const editor = document.getElementById('editor');
         const requestsList = document.getElementById('requests-list');
 
+        // نظام الإشعارات الجميل
+        function showNotification(message, isError = false) {
+            const toast = document.getElementById('toast');
+            toast.innerText = message;
+            toast.style.backgroundColor = isError ? "var(--danger)" : "var(--secondary)";
+            toast.className = "show";
+            setTimeout(() => { toast.className = toast.className.replace("show", ""); }, 3500);
+        }
+
         onAuthStateChanged(auth, async (user) => {
             if (user) {
                 loginSection.style.display = 'none';
                 
-                // جلب القصة
                 const storyDoc = await getDoc(doc(db, "content", "myStory"));
                 if (storyDoc.exists()) {
                     storyText.innerText = storyDoc.data().text;
@@ -58,15 +198,14 @@
                 }
 
                 if (user.email === ADMIN_EMAIL) {
-                    // إذا كان الأدمن
                     adminPanel.style.display = 'block';
                     storyContent.style.display = 'block';
-                    loadRequests(); // تحميل الطلبات المعلقة
+                    loadRequests();
                 } else {
-                    // إذا كان مستخدم عادي
                     const userDoc = await getDoc(doc(db, "allowedUsers", user.email));
                     if (userDoc.exists() && userDoc.data().isAllowed === true) {
                         storyContent.style.display = 'block';
+                        showNotification("مرحباً بك! قراءة ممتعة.");
                     } else {
                         deniedMessage.style.display = 'block';
                     }
@@ -79,46 +218,49 @@
             }
         });
 
-        // تسجيل الدخول
-        window.login = () => {
+        window.login = async () => {
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
-            signInWithEmailAndPassword(auth, email, password)
-                .catch(error => alert("خطأ في تسجيل الدخول، تأكد من الإيميل وكلمة المرور."));
-        };
-
-        // طلب صلاحية (إنشاء حساب جديد)
-        window.requestAccess = async () => {
-            const email = document.getElementById('signup-email').value;
-            const password = document.getElementById('signup-password').value;
-            if(!email || !password) return alert("يرجى إدخال الإيميل وكلمة المرور");
+            if(!email || !password) return showNotification("الرجاء إدخال البريد وكلمة المرور", true);
             
             try {
-                // إنشاء الحساب
-                await createUserWithEmailAndPassword(auth, email, password);
-                // إضافته لقاعدة البيانات كـ "غير مصرح له"
-                await setDoc(doc(db, "allowedUsers", email), { isAllowed: false });
-                alert("تم إرسال طلبك للأدمن بنجاح! يرجى العودة لاحقاً بعد أن يتم قبولك.");
-                signOut(auth); // تسجيل خروجه فوراً لكي لا يدخل حتى يتم قبوله
+                await signInWithEmailAndPassword(auth, email, password);
+                showNotification("تم تسجيل الدخول بنجاح!");
             } catch(error) {
-                alert("حدث خطأ: " + error.message);
+                showNotification("خطأ في تسجيل الدخول، تأكد من البيانات.", true);
             }
         };
 
-        // تسجيل الخروج
-        window.logout = () => signOut(auth);
-
-        // حفظ القصة (للأدمن)
-        window.saveStory = async () => {
-            const newText = editor.value;
-            await setDoc(doc(db, "content", "myStory"), { text: newText });
-            storyText.innerText = newText;
-            alert("تم حفظ القصة بنجاح!");
+        window.requestAccess = async () => {
+            const email = document.getElementById('signup-email').value;
+            const password = document.getElementById('signup-password').value;
+            if(!email || !password) return showNotification("يرجى إدخال الإيميل وكلمة المرور", true);
+            
+            try {
+                await createUserWithEmailAndPassword(auth, email, password);
+                await setDoc(doc(db, "allowedUsers", email), { isAllowed: false });
+                showNotification("تم إرسال طلبك بنجاح! يرجى الانتظار لحين القبول.");
+                signOut(auth);
+            } catch(error) {
+                showNotification("حدث خطأ، ربما الإيميل مستخدم مسبقاً.", true);
+            }
         };
 
-        // جلب الطلبات المعلقة (للأدمن)
+        window.logout = () => signOut(auth);
+
+        window.saveStory = async () => {
+            const newText = editor.value;
+            try {
+                await setDoc(doc(db, "content", "myStory"), { text: newText });
+                storyText.innerText = newText;
+                showNotification("✨ تم حفظ القصة بنجاح!");
+            } catch(error) {
+                showNotification("حدث خطأ أثناء الحفظ", true);
+            }
+        };
+
         async function loadRequests() {
-            requestsList.innerHTML = "جاري تحميل الطلبات...";
+            requestsList.innerHTML = "<p>جاري تحميل الطلبات...</p>";
             const querySnapshot = await getDocs(collection(db, "allowedUsers"));
             let html = "";
             let hasRequests = false;
@@ -128,67 +270,73 @@
                     hasRequests = true;
                     html += `
                     <div class="request-box">
-                        <span>${d.id}</span>
-                        <button class="btn-success" onclick="approveUser('${d.id}')">قبول الطلب</button>
+                        <span style="font-weight: 600; color: #4b5563;">${d.id}</span>
+                        <button class="btn-success btn-small" onclick="approveUser('${d.id}')">✔️ السماح</button>
                     </div>`;
                 }
             });
-            requestsList.innerHTML = hasRequests ? html : "<p>لا توجد طلبات معلقة حالياً.</p>";
+            requestsList.innerHTML = hasRequests ? html : "<p style='color: #6b7280; text-align: center;'>لا توجد طلبات معلقة حالياً.</p>";
         }
 
-        // الموافقة على مستخدم (للأدمن)
         window.approveUser = async (userEmail) => {
-            await updateDoc(doc(db, "allowedUsers", userEmail), { isAllowed: true });
-            alert("تم السماح للمستخدم: " + userEmail);
-            loadRequests(); // تحديث القائمة
+            try {
+                await updateDoc(doc(db, "allowedUsers", userEmail), { isAllowed: true });
+                showNotification(`تم السماح للمستخدم: ${userEmail}`);
+                loadRequests();
+            } catch(error) {
+                showNotification("حدث خطأ أثناء الموافقة", true);
+            }
         };
     </script>
 </head>
 <body>
 
+<div id="toast"></div>
+
 <div class="container">
-    <h2 style="text-align: center; color: #333;"> My Story😔❤️</h2>
+    <h2>✨ مـحـطـات مـن حـيـاتـي ✨</h2>
 
     <div id="login-section">
-        <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+        <div class="card-section">
             <h3>تسجيل الدخول</h3>
-            <input type="email" id="email" placeholder="البريد الإلكتروني"><br>
-            <input type="password" id="password" placeholder="كلمة المرور"><br>
-            <button onclick="login()">دخول</button>
+            <input type="email" id="email" placeholder="البريد الإلكتروني">
+            <input type="password" id="password" placeholder="كلمة المرور">
+            <button onclick="login()">تسجيل الدخول</button>
         </div>
 
-        <div style="background: #e9ecef; padding: 15px; border-radius: 8px;">
-            <h3>زائر جديد؟ اطلب الإذن للقراءة</h3>
-            <p style="font-size: 14px; color: #555;">اكتب إيميلك وضع كلمة مرور لإنشاء حساب وإرسال طلب للأدمن.</p>
-            <input type="email" id="signup-email" placeholder="بريدك الإلكتروني"><br>
-            <input type="password" id="signup-password" placeholder="كلمة المرور جديدة لك"><br>
+        <div class="card-section" style="background: #f0fdf4; border-color: #dcfce7;">
+            <h3 style="color: var(--secondary-hover);">زائر جديد؟ اطلب الإذن للقراءة</h3>
+            <p>اكتب بريدك الإلكتروني وضع كلمة مرور لإنشاء حساب وإرسال طلب للأدمن.</p>
+            <input type="email" id="signup-email" placeholder="بريدك الإلكتروني">
+            <input type="password" id="signup-password" placeholder="كلمة مرور جديدة لك">
             <button class="btn-success" onclick="requestAccess()">إرسال طلب للأدمن</button>
         </div>
     </div>
 
-    <div id="denied-message" style="text-align: center;">
-        <h3 style="color: #dc3545;">عذراً، طلبك لا يزال قيد المراجعة أو لم يتم منحك الصلاحية.</h3>
-        <button onclick="logout()">تسجيل خروج</button>
+    <div id="denied-message" class="card-section" style="text-align: center; background: #fef2f2; border-color: #fee2e2;">
+        <h3 style="color: var(--danger);">عذراً، طلبك لا يزال قيد المراجعة ⏳</h3>
+        <p>لم يتم منحك الصلاحية للقراءة بعد، يرجى المحاولة لاحقاً بعد موافقة الأدمن.</p>
+        <button class="btn-danger btn-small" onclick="logout()">تسجيل خروج</button>
     </div>
 
-    <div id="admin-panel" style="background: #fff3cd; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
-        <h3 style="color: #856404;">⚙️ لوحة تحكم الأدمن</h3>
+    <div id="admin-panel" class="card-section" style="background: #eef2ff; border-color: #e0e7ff;">
+        <h3 style="color: var(--primary);">⚙️ لوحة تحكم الأدمن (هاشم)</h3>
         
-        <h4>1. تعديل القصة:</h4>
-        <textarea id="editor" placeholder="اكتب أو عدّل قصتك هنا..."></textarea><br>
-        <button onclick="saveStory()">💾 حفظ التعديلات</button>
+        <h4 style="margin-top: 20px;">1. كتابة وتعديل القصة:</h4>
+        <textarea id="editor" placeholder="ابدأ بكتابة فصول حياتك هنا..."></textarea>
+        <button onclick="saveStory()" style="margin-top: 10px;">💾 حفظ ونشر التعديلات</button>
         
-        <hr style="border: 0; border-top: 1px solid #ffeeba; margin: 20px 0;">
+        <hr style="border: 0; border-top: 2px dashed #c7d2fe; margin: 30px 0;">
         
         <h4>2. طلبات القراءة المعلقة:</h4>
         <div id="requests-list"></div>
     </div>
 
     <div id="story-content">
-        <hr>
-        <div style="white-space: pre-wrap; font-size: 18px; color: #444;" id="story-text">جاري تحميل القصة...</div>
-        <br>
-        <button style="background: #6c757d;" onclick="logout()">تسجيل خروج</button>
+        <h3 style="color: var(--primary); border-bottom: 2px solid #e5e7eb; padding-bottom: 10px;">📖 القصة:</h3>
+        <div class="story-display" id="story-text">جاري تحميل القصة...</div>
+        
+        <button class="btn-danger" style="margin-top: 30px; width: auto; padding: 10px 20px;" onclick="logout()">تسجيل خروج</button>
     </div>
 </div>
 
