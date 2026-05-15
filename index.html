@@ -4,62 +4,66 @@
     <meta charset="UTF-8">
     <title>قصة حياتي</title>
     <style>
-        body { font-family: Arial, sans-serif; padding: 20px; background-color: #f4f4f9; }
+        body { font-family: Arial, sans-serif; padding: 20px; background-color: #f4f4f9; line-height: 1.6; }
         .container { max-width: 800px; margin: auto; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
-        button { padding: 10px 15px; cursor: pointer; background: #007bff; color: white; border: none; border-radius: 5px; }
-        textarea { width: 100%; height: 200px; margin-top: 10px; padding: 10px; }
+        button { padding: 10px 15px; cursor: pointer; background: #007bff; color: white; border: none; border-radius: 5px; margin-top: 5px; }
+        button:hover { background: #0056b3; }
+        input { padding: 8px; width: 80%; max-width: 300px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 4px; }
+        textarea { width: 100%; height: 200px; margin-top: 10px; padding: 10px; border: 1px solid #ccc; border-radius: 4px; }
         #admin-panel, #story-content, #login-section, #denied-message { display: none; }
+        .request-box { background: #e9ecef; padding: 10px; margin: 10px 0; border-radius: 5px; display: flex; justify-content: space-between; align-items: center; }
+        .btn-success { background: #28a745; }
+        .btn-success:hover { background: #218838; }
     </style>
     
-    <!-- ربط مكتبات Firebase الأساسية -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-        import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getFirestore, doc, getDoc, setDoc, updateDoc, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-        // ⚠️ هنا ستضع إعدادات مشروعك من Firebase لاحقاً
+        // إعدادات مشروع Firebase الخاصة بك
         const firebaseConfig = {
-  apiKey: "AIzaSyChl-6LNVY7pSbBEdPbucTjnm9vLJKU7xc",
-  authDomain: "mystory-9601f.firebaseapp.com",
-  projectId: "mystory-9601f",
-  storageBucket: "mystory-9601f.firebasestorage.app",
-  messagingSenderId: "270348211328",
-  appId: "1:270348211328:web:3c0c3ef7a0a23e2a01c265"
-};
+            apiKey: "AIzaSyChl-6LNVY7pSbBEdPbucTjnm9vLJKU7xc",
+            authDomain: "mystory-9601f.firebaseapp.com",
+            projectId: "mystory-9601f",
+            storageBucket: "mystory-9601f.firebasestorage.app",
+            messagingSenderId: "270348211328",
+            appId: "1:270348211328:web:3c0c3ef7a0a23e2a01c265"
+        };
 
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
 
-        // إيميل الأدمن (أنت)
+        // إيميلك كأدمن
         const ADMIN_EMAIL = "hashem.anwer.2003@gmail.com"; 
 
-        // عناصر الصفحة
         const loginSection = document.getElementById('login-section');
         const storyContent = document.getElementById('story-content');
         const adminPanel = document.getElementById('admin-panel');
         const deniedMessage = document.getElementById('denied-message');
         const storyText = document.getElementById('story-text');
         const editor = document.getElementById('editor');
+        const requestsList = document.getElementById('requests-list');
 
-        // التحقق من حالة تسجيل الدخول
         onAuthStateChanged(auth, async (user) => {
             if (user) {
                 loginSection.style.display = 'none';
                 
-                // جلب القصة من قاعدة البيانات
+                // جلب القصة
                 const storyDoc = await getDoc(doc(db, "content", "myStory"));
                 if (storyDoc.exists()) {
                     storyText.innerText = storyDoc.data().text;
                     editor.value = storyDoc.data().text;
                 }
 
-                // التحقق مما إذا كان المستخدم هو الأدمن
                 if (user.email === ADMIN_EMAIL) {
+                    // إذا كان الأدمن
                     adminPanel.style.display = 'block';
                     storyContent.style.display = 'block';
+                    loadRequests(); // تحميل الطلبات المعلقة
                 } else {
-                    // التحقق مما إذا كان المستخدم مسموحاً له برؤية القصة
+                    // إذا كان مستخدم عادي
                     const userDoc = await getDoc(doc(db, "allowedUsers", user.email));
                     if (userDoc.exists() && userDoc.data().isAllowed === true) {
                         storyContent.style.display = 'block';
@@ -75,58 +79,116 @@
             }
         });
 
-        // دالة تسجيل الدخول
+        // تسجيل الدخول
         window.login = () => {
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
             signInWithEmailAndPassword(auth, email, password)
-                .catch(error => alert("خطأ في تسجيل الدخول: " + error.message));
+                .catch(error => alert("خطأ في تسجيل الدخول، تأكد من الإيميل وكلمة المرور."));
         };
 
-        // دالة تسجيل الخروج
-        window.logout = () => {
-            signOut(auth);
+        // طلب صلاحية (إنشاء حساب جديد)
+        window.requestAccess = async () => {
+            const email = document.getElementById('signup-email').value;
+            const password = document.getElementById('signup-password').value;
+            if(!email || !password) return alert("يرجى إدخال الإيميل وكلمة المرور");
+            
+            try {
+                // إنشاء الحساب
+                await createUserWithEmailAndPassword(auth, email, password);
+                // إضافته لقاعدة البيانات كـ "غير مصرح له"
+                await setDoc(doc(db, "allowedUsers", email), { isAllowed: false });
+                alert("تم إرسال طلبك للأدمن بنجاح! يرجى العودة لاحقاً بعد أن يتم قبولك.");
+                signOut(auth); // تسجيل خروجه فوراً لكي لا يدخل حتى يتم قبوله
+            } catch(error) {
+                alert("حدث خطأ: " + error.message);
+            }
         };
 
-        // دالة حفظ التعديلات (للأدمن فقط)
+        // تسجيل الخروج
+        window.logout = () => signOut(auth);
+
+        // حفظ القصة (للأدمن)
         window.saveStory = async () => {
             const newText = editor.value;
             await setDoc(doc(db, "content", "myStory"), { text: newText });
             storyText.innerText = newText;
             alert("تم حفظ القصة بنجاح!");
         };
+
+        // جلب الطلبات المعلقة (للأدمن)
+        async function loadRequests() {
+            requestsList.innerHTML = "جاري تحميل الطلبات...";
+            const querySnapshot = await getDocs(collection(db, "allowedUsers"));
+            let html = "";
+            let hasRequests = false;
+            
+            querySnapshot.forEach((d) => {
+                if (d.data().isAllowed === false && d.id !== ADMIN_EMAIL) {
+                    hasRequests = true;
+                    html += `
+                    <div class="request-box">
+                        <span>${d.id}</span>
+                        <button class="btn-success" onclick="approveUser('${d.id}')">قبول الطلب</button>
+                    </div>`;
+                }
+            });
+            requestsList.innerHTML = hasRequests ? html : "<p>لا توجد طلبات معلقة حالياً.</p>";
+        }
+
+        // الموافقة على مستخدم (للأدمن)
+        window.approveUser = async (userEmail) => {
+            await updateDoc(doc(db, "allowedUsers", userEmail), { isAllowed: true });
+            alert("تم السماح للمستخدم: " + userEmail);
+            loadRequests(); // تحديث القائمة
+        };
     </script>
 </head>
 <body>
 
 <div class="container">
-    <h2>محطات من حياتي</h2>
+    <h2 style="text-align: center; color: #333;">📖 محطات من حياتي</h2>
 
-    <!-- قسم تسجيل الدخول -->
-    <div id="login-section" style="display: block;">
-        <input type="email" id="email" placeholder="البريد الإلكتروني" required><br><br>
-        <input type="password" id="password" placeholder="كلمة المرور" required><br><br>
-        <button onclick="login()">تسجيل الدخول</button>
+    <div id="login-section">
+        <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+            <h3>تسجيل الدخول</h3>
+            <input type="email" id="email" placeholder="البريد الإلكتروني"><br>
+            <input type="password" id="password" placeholder="كلمة المرور"><br>
+            <button onclick="login()">دخول</button>
+        </div>
+
+        <div style="background: #e9ecef; padding: 15px; border-radius: 8px;">
+            <h3>زائر جديد؟ اطلب الإذن للقراءة</h3>
+            <p style="font-size: 14px; color: #555;">اكتب إيميلك وضع كلمة مرور لإنشاء حساب وإرسال طلب للأدمن.</p>
+            <input type="email" id="signup-email" placeholder="بريدك الإلكتروني"><br>
+            <input type="password" id="signup-password" placeholder="كلمة المرور جديدة لك"><br>
+            <button class="btn-success" onclick="requestAccess()">إرسال طلب للأدمن</button>
+        </div>
     </div>
 
-    <!-- رسالة الرفض -->
-    <div id="denied-message">
-        <h3 style="color: red;">عذراً، لم يتم منحك صلاحية لقراءة القصة بعد.</h3>
+    <div id="denied-message" style="text-align: center;">
+        <h3 style="color: #dc3545;">عذراً، طلبك لا يزال قيد المراجعة أو لم يتم منحك الصلاحية.</h3>
         <button onclick="logout()">تسجيل خروج</button>
     </div>
 
-    <!-- لوحة تحكم الأدمن -->
-    <div id="admin-panel">
-        <h3>لوحة تحكم (الأدمن)</h3>
+    <div id="admin-panel" style="background: #fff3cd; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+        <h3 style="color: #856404;">⚙️ لوحة تحكم الأدمن</h3>
+        
+        <h4>1. تعديل القصة:</h4>
         <textarea id="editor" placeholder="اكتب أو عدّل قصتك هنا..."></textarea><br>
-        <button onclick="saveStory()">حفظ التعديلات</button>
-        <hr>
+        <button onclick="saveStory()">💾 حفظ التعديلات</button>
+        
+        <hr style="border: 0; border-top: 1px solid #ffeeba; margin: 20px 0;">
+        
+        <h4>2. طلبات القراءة المعلقة:</h4>
+        <div id="requests-list"></div>
     </div>
 
-    <!-- عرض القصة -->
     <div id="story-content">
-        <p id="story-text">جاري تحميل القصة...</p>
-        <button onclick="logout()">تسجيل خروج</button>
+        <hr>
+        <div style="white-space: pre-wrap; font-size: 18px; color: #444;" id="story-text">جاري تحميل القصة...</div>
+        <br>
+        <button style="background: #6c757d;" onclick="logout()">تسجيل خروج</button>
     </div>
 </div>
 
